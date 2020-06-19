@@ -39,3 +39,5 @@ beta2: 0.999 #default
 epochs: 1
 batch_size: 16
 discriminator_steps: 1
+load_params: 1
+save_params: 1

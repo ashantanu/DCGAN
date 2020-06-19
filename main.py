@@ -2,9 +2,9 @@ import numpy as np
 import torch
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 import utils
-
 from Generator import Generator
 from Discriminator import Discriminator
 
@@ -34,6 +34,12 @@ dis_loss = []
 gen_loss = []
 generated_imgs = []
 iteration = 0
+
+if(config['load_params'] and os.path.isfile("./gen_params.pth.tar")):
+    print("loading params...")
+    gen.load_state_dict(torch.load("./gen_params.pth.tar"))
+    dis.load_state_dict(torch.load("./dis_params.pth.tar"))
+
 #training
 for epoch in range(config['epochs']):
     iterator = iter(dataloader)
@@ -55,11 +61,10 @@ for epoch in range(config['epochs']):
 
             #compute loss
             loss_true_imgs = criterion(dis(imgs).view(-1),torch.ones(imgs.shape[0]))
-            loss_fake_imgs = criterion(dis(fake_images.detach()).view(-1),torch.zeros(z.shape[0]))
-
-            #update params
             loss_true_imgs.backward()
+            loss_fake_imgs = criterion(dis(fake_images.detach()).view(-1),torch.zeros(z.shape[0]))
             loss_fake_imgs.backward()
+
             total_error = loss_fake_imgs+loss_true_imgs
             dis_optimizer.step()
         
@@ -73,18 +78,21 @@ for epoch in range(config['epochs']):
         gen_optimizer.step()
 
         iteration+=1
-
-        if(iteration==21):
-            break
+        
         #log things
-        if(iteration%10)==0:
+        if(iteration%100)==0:
             dis_loss.append(loss_true_imgs.mean().item()+loss_fake_imgs.mean().item())
             gen_loss.append(loss_gen.mean().item())
 
-            if(epoch%10==0) or iteration%10==0:
+            if(epoch%100==0) or iteration%500==0:
+                
                 generated_imgs.append(gen(fixed_latent).detach())    #generate image
                 print("Loss epoch:%d, Dis Loss:%.4f, Gen Loss:%.4f",epoch,dis_loss[-1],gen_loss[-1])
 
+                if( config['save_params'] ):
+                    print("saving params...")
+                    torch.save(gen.state_dict(), "./gen_params.pth.tar")
+                    torch.save(dis.state_dict(), "./dis_params.pth.tar")
 
 #plot errors
 utils.save_loss_plot(gen_loss,dis_loss)
