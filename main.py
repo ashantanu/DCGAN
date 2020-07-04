@@ -132,3 +132,6 @@ utils.save_result_images(next(iter(dataloader))[0][:15].to(device),generated_img
 
 #save generated images so see what happened
 torch.save(generated_imgs,"gen_imgs_array.pt")
+
+#save gif
+utils.save_gif(generated_imgs,4,config)
