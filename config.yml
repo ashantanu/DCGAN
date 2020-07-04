@@ -26,7 +26,7 @@ g_output_pad: 0 #needed to get the correct output dims because stride > 1
 leaky_ReLU_slope: 0.2
 
 # training related
-ngpu: 0
+ngpu: 1
 
 #need to find a way to add initialization function params here
 
@@ -37,9 +37,9 @@ beta2: 0.999 #default
 
 #training parameters
 epochs: 3
-batch_size: 16
+batch_size: 128
 discriminator_steps: 1
 generator_steps: 1
 
-load_params: True
+load_params: False
 save_params: True

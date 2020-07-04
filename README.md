@@ -22,9 +22,17 @@ mkdir celeba && wget https://s3-us-west-1.amazonaws.com/udacity-dlnfd/datasets/c
 * run main.py
 
 # Results
-Using 5 epochs on CPU:
+Using 3 epochs on GPU
 
 ![](./generated_images.png)
+
+GPU Training animation
+
+![](./animation.gif)
+
+Loss
+
+![](./loss.png)
 
 # DCGAN Implementation using PyTorch
 DCGAN implementation for learning.
