@@ -4,6 +4,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import torchvision.utils as vutils
+import torch.nn as nn
 
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
@@ -41,11 +42,19 @@ def get_dataloader(config, dataset):
     return dataloader
 
 def init_weights(m):
+    '''
     if type(m) in [ torch.nn.ConvTranspose2d, torch.nn.Conv2d, torch.nn.Linear ]:
-        torch.nn.init.normal_(m.weight,0,0.02)
+        torch.nn.init.normal_(m.weight,0.0,0.02)
     if type(m) == torch.nn.BatchNorm2d: #copied this from tutorial. Need to figure out the logic
         torch.nn.init.normal_(m.weight,1,0.02)
         torch.nn.init.constant_(m.bias,0)
+    '''
+    classname = m.__class__.__name__
+    if classname.find('Conv') != -1:
+        nn.init.normal_(m.weight.data, 0.0, 0.02)
+    elif classname.find('BatchNorm') != -1:
+        nn.init.normal_(m.weight.data, 1.0, 0.02)
+        nn.init.constant_(m.bias.data, 0)
 
 def save_loss_plot(g_loss,d_loss):
     plt.figure(figsize=(10,5))

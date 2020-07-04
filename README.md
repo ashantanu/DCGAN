@@ -25,6 +25,16 @@ Used below resources:
 * [GAN Hacks](https://github.com/soumith/ganhacks)
 * [Pytorch Autograd Tutorials](https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#gradients)
 * Pytorch autograd [works](https://towardsdatascience.com/pytorch-autograd-understanding-the-heart-of-pytorchs-magic-2686cd94ec95#:~:text=The%20leaves%20of%20this%20graph,way%20using%20the%20chain%20rule%20.)
+* Google Colab: [Keep Connected](https://stackoverflow.com/questions/57113226/how-to-prevent-google-colab-from-disconnecting), [add data](https://medium.com/@prajwal.prashanth22/google-colab-drive-as-persistent-storage-for-long-training-runs-cb82bc1d5b71), [save model](https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch)
+* [Why GANs are hard to train](https://medium.com/@jonathan_hui/gan-why-it-is-so-hard-to-train-generative-advisory-networks-819a86b3750b)
+
+<pre><code>
+function ClickConnect(){
+    console.log("Clicked on connect button"); 
+    document.querySelector("colab-toolbar-button").click() // Change id here
+}
+setInterval(ClickConnect,60000)
+</code></pre>
 
 # TODO
 * Check what is dilation in conv2d layer
@@ -32,3 +42,4 @@ Used below resources:
 * Weight initialization should use values from config
 * Understand weight initialization in BatchNorm: how does it work?, what is affine used for?, how to initialize it properly
 * Is there a choice to be made for sampling latent variable 
+* Check why 1024 layer skipped in tutorial

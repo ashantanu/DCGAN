@@ -7,6 +7,7 @@ import os
 import utils
 from Generator import Generator
 from Discriminator import Discriminator
+import torchvision.utils as vutils
 
 #initial steps
 config_file = "config.yml"
@@ -28,29 +29,34 @@ dis_optimizer = torch.optim.Adam(params=dis.parameters(),
                             betas=[config['beta1'],config['beta2']])
 
 criterion = torch.nn.BCELoss()
-fixed_latent = torch.randn(16,config['len_z'])
+fixed_latent = torch.randn(16,config['len_z'],1,1)
 
 dis_loss = []
 gen_loss = []
-generated_imgs = []
+generated_imgs = torch.load("gen_imgs_array.pt")
 iteration = 0
 
 if(config['load_params'] and os.path.isfile("./gen_params.pth.tar")):
     print("loading params...")
     gen.load_state_dict(torch.load("./gen_params.pth.tar"))
     dis.load_state_dict(torch.load("./dis_params.pth.tar"))
+    gen_optimizer.load_state_dict(torch.load("./gen_optimizer_state.pth.tar"))
+    dis_optimizer.load_state_dict(torch.load("./dis_optimizer_state.pth.tar"))
+    print("loaded params.")
 
 #training
+#'''
 for epoch in range(config['epochs']):
     iterator = iter(dataloader)
     dataloader_flag = True
     while(dataloader_flag):
         for _ in range(config['discriminator_steps']):
+            dis.zero_grad()
+            gen.zero_grad()
             dis_optimizer.zero_grad()
 
             #sample mini-batch
-            z = torch.randn(config['batch_size'],config['len_z'])
-            fake_images = gen(z)
+            z = torch.randn(config['batch_size'],config['len_z'],1,1)
 
             #get images from dataloader via iterator
             try:
@@ -62,6 +68,7 @@ for epoch in range(config['epochs']):
             #compute loss
             loss_true_imgs = criterion(dis(imgs).view(-1),torch.ones(imgs.shape[0]))
             loss_true_imgs.backward()
+            fake_images = gen(z)    
             loss_fake_imgs = criterion(dis(fake_images.detach()).view(-1),torch.zeros(z.shape[0]))
             loss_fake_imgs.backward()
 
@@ -69,30 +76,42 @@ for epoch in range(config['epochs']):
             dis_optimizer.step()
         
         #generator step
-        gen_optimizer.zero_grad()
-        z = torch.randn(config['batch_size'],config['len_z'])   #sample mini-batch
-        loss_gen = criterion(dis(gen(z)).view(-1),torch.ones(z.shape[0]))    #compute loss
+        for _ in range(config['generator_steps']):
+            gen.zero_grad()
+            dis.zero_grad()
+            dis_optimizer.zero_grad()
+            gen_optimizer.zero_grad()
 
-        #update params
-        loss_gen.backward()
-        gen_optimizer.step()
+            #z = torch.randn(config['batch_size'],config['len_z'])   #sample mini-batch
+            loss_gen = criterion(dis(fake_images).view(-1),torch.ones(z.shape[0]))    #compute loss
+
+            #update params
+            loss_gen.backward()
+            gen_optimizer.step()
 
         iteration+=1
         
         #log things
-        if(iteration%100)==0:
-            dis_loss.append(loss_true_imgs.mean().item()+loss_fake_imgs.mean().item())
+        if(iteration%50)==0:
+            dis_loss.append(total_error.mean().item())
             gen_loss.append(loss_gen.mean().item())
 
-            if(epoch%100==0) or iteration%500==0:
-                
-                generated_imgs.append(gen(fixed_latent).detach())    #generate image
-                print("Loss epoch:%d, Dis Loss:%.4f, Gen Loss:%.4f",epoch,dis_loss[-1],gen_loss[-1])
+            if(epoch%1000==0) or iteration%50==0:
+                if(iteration==100):
+                    with torch.no_grad():
+                        generated_imgs.append(gen(fixed_latent).detach())    #generate image
+                        torch.save(generated_imgs,"gen_imgs_array.pt")
+                    utils.save_result_images(next(iter(dataloader))[0],generated_imgs[-1],4)
 
+                print("Loss iteration:%d, Dis Loss:%.4f, Gen Loss:%.4f"%(iteration,dis_loss[-1],gen_loss[-1]))
+                
                 if( config['save_params'] ):
                     print("saving params...")
                     torch.save(gen.state_dict(), "./gen_params.pth.tar")
                     torch.save(dis.state_dict(), "./dis_params.pth.tar")
+                    torch.save(dis_optimizer.state_dict(), "./dis_optimizer_state.pth.tar")
+                    torch.save(gen_optimizer.state_dict(), "./gen_optimizer_state.pth.tar")
+                    print("saved params.")
 
 #plot errors
 utils.save_loss_plot(gen_loss,dis_loss)
