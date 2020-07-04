@@ -78,10 +78,13 @@ def save_result_images(real_images,fake_images,nrow,config):
     grid_real = vutils.make_grid(real_images*std+mean,nrow=nrow)
     plt.axis("off")
     plt.title("Real Images")
+    plt.imshow(grid_real.permute(1,2,0))
+
     plt.subplot(1,2,2)
     grid_fake = vutils.make_grid(fake_images*std+mean,nrow=nrow)
     plt.axis("off")
     plt.title("Fake Images")
+    plt.imshow(grid_fake.permute(1,2,0))
     plt.savefig("./generated_images.png",dpi=300)
 
 def save_gif(image_array,nrow,config):

@@ -111,8 +111,6 @@ for epoch in range(config['epochs']):
                 with torch.no_grad():
                     generated_imgs.append(gen(fixed_latent).detach())    #generate image
                     torch.save(generated_imgs,"gen_imgs_array.pt")
-                utils.save_result_images(next(iter(dataloader))[0][:15],generated_imgs[-1].cpu(),4,config)
-                utils.save_loss_plot(gen_loss,dis_loss)
 
             print("Iteration:%d, Dis Loss:%.4f, Gen Loss:%.4f, time elapsed:%.4f"%(iteration,dis_loss[-1],gen_loss[-1],elapsed_time))
             
