@@ -33,7 +33,7 @@ fixed_latent = torch.randn(16,config['len_z'],1,1)
 
 dis_loss = []
 gen_loss = []
-generated_imgs = torch.load("gen_imgs_array.pt")
+generated_imgs = []
 iteration = 0
 
 if(config['load_params'] and os.path.isfile("./gen_params.pth.tar")):
@@ -42,6 +42,7 @@ if(config['load_params'] and os.path.isfile("./gen_params.pth.tar")):
     dis.load_state_dict(torch.load("./dis_params.pth.tar"))
     gen_optimizer.load_state_dict(torch.load("./gen_optimizer_state.pth.tar"))
     dis_optimizer.load_state_dict(torch.load("./dis_optimizer_state.pth.tar"))
+    generated_imgs = torch.load("gen_imgs_array.pt")
     print("loaded params.")
 
 #training
@@ -117,7 +118,7 @@ for epoch in range(config['epochs']):
 utils.save_loss_plot(gen_loss,dis_loss)
 
 #plot generated images
-utils.save_result_images(next(iter(dataloader))[0],generated_imgs[-1],4)
+utils.save_result_images(next(iter(dataloader))[0],generated_imgs[-1],4,config)
 
 #save generated images so see what happened
 torch.save(generated_imgs,"gen_imgs_array.pt")

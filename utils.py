@@ -66,15 +66,17 @@ def save_loss_plot(g_loss,d_loss):
     plt.legend()
     plt.savefig("./loss.png")
 
-def save_result_images(real_images,fake_images,nrow):
+def save_result_images(real_images,fake_images,nrow,config):
+    mean = config['input_normalise_mean']
+    std = config['input_normalise_std']
     plt.figure(figsize=(10,10))
     plt.subplot(1,2,1)
-    grid_real = vutils.make_grid(real_images,nrow=nrow)
+    grid_real = vutils.make_grid(real_images*std+mean,nrow=nrow)
     plt.axis("off")
     plt.title("Real Images")
     plt.imshow(grid_real.permute(1,2,0))
     plt.subplot(1,2,2)
-    grid_fake = vutils.make_grid(fake_images,nrow=nrow)
+    grid_fake = vutils.make_grid(fake_images*std+mean,nrow=nrow)
     plt.axis("off")
     plt.title("Fake Images")
     plt.imshow(grid_fake.permute(1,2,0))

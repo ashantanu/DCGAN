@@ -1,3 +1,31 @@
+<!-- TOC -->
+
+- [How to run](#how-to-run)
+- [Results](#results)
+- [DCGAN Implementation using PyTorch](#dcgan-implementation-using-pytorch)
+- [Notes](#notes)
+- [Other Useful Resources](#other-useful-resources)
+- [TODO](#todo)
+
+<!-- /TOC -->
+
+# How to run
+* clone this repo using 
+'''
+git clone https://github.com/ashantanu/DCGAN.git
+'''
+* download and unzip celeba [dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to the folder name 'celeba'. I used below snippet from a udacity google colab [notebook](https://colab.research.google.com/drive/1ytjiIM_sZohV1I6p-9Cov6DtJjidJmcq)
+'''
+mkdir celeba && wget https://s3-us-west-1.amazonaws.com/udacity-dlnfd/datasets/celeba.zip
+'''
+* control parameters in config.yml
+* run main.py
+
+# Results
+Using 5 epochs on CPU:
+
+![](./generated_images.png)
+
 # DCGAN Implementation using PyTorch
 DCGAN implementation for learning.
 
@@ -28,6 +56,7 @@ Used below resources:
 * Google Colab: [Keep Connected](https://stackoverflow.com/questions/57113226/how-to-prevent-google-colab-from-disconnecting), [add data](https://medium.com/@prajwal.prashanth22/google-colab-drive-as-persistent-storage-for-long-training-runs-cb82bc1d5b71), [save model](https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch)
 * [Why GANs are hard to train](https://medium.com/@jonathan_hui/gan-why-it-is-so-hard-to-train-generative-advisory-networks-819a86b3750b)
 
+snippet to keep colab running:
 <pre><code>
 function ClickConnect(){
     console.log("Clicked on connect button"); 
