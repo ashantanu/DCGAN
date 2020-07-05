@@ -34,7 +34,7 @@ GPU Training animation
 
 ![](./animation.gif)
 
-Loss
+Loss (x axis unit is 100 iterations)
 
 ![](./loss.png)
 
