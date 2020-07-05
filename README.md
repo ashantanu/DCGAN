@@ -15,13 +15,13 @@ DCGAN implementation for learning.
 
 # How To Run
 * clone this repo using 
-'''
+<pre><code>
 git clone https://github.com/ashantanu/DCGAN.git
-'''
+</code></pre>
 * download and unzip celeba [dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to the folder name 'celeba'. I used below snippet from a udacity google colab [notebook](https://colab.research.google.com/drive/1ytjiIM_sZohV1I6p-9Cov6DtJjidJmcq)
-'''
+<pre><code>
 mkdir celeba && wget https://s3-us-west-1.amazonaws.com/udacity-dlnfd/datasets/celeba.zip
-'''
+</code></pre>
 * control parameters in config.yml
 * run main.py
 
