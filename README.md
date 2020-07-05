@@ -1,15 +1,19 @@
+# DCGAN Implementation using PyTorch
+DCGAN implementation for learning.
+
 <!-- TOC -->
 
-- [How to run](#how-to-run)
-- [Results](#results)
 - [DCGAN Implementation using PyTorch](#dcgan-implementation-using-pytorch)
+- [How To Run](#how-to-run)
+- [Results](#results)
+- [Resources Used](#resources-used)
 - [Notes](#notes)
 - [Other Useful Resources](#other-useful-resources)
 - [TODO](#todo)
 
 <!-- /TOC -->
 
-# How to run
+# How To Run
 * clone this repo using 
 '''
 git clone https://github.com/ashantanu/DCGAN.git
@@ -34,10 +38,8 @@ Loss
 
 ![](./loss.png)
 
-# DCGAN Implementation using PyTorch
-DCGAN implementation for learning.
 
-Used below resources:
+# Resources Used
 * [Dataloader tutorial](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html)
 * [Transforms](https://pytorch.org/docs/stable/torchvision/transforms.html?highlight=transforms)
 * [ImageFolder](https://pytorch.org/docs/stable/torchvision/datasets.html?highlight=imagefolder#torchvision.datasets.ImageFolder)
